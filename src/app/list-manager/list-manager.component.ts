@@ -4,7 +4,7 @@ import {TodoItem} from '../interfaces/todo-item';
 @Component({
   selector: 'todo-list-manager',
   templateUrl: './list-manager.component.html',
-  styleUrls: ['./list-manager.component.css']
+  styleUrls: ['./list-manager.component.scss']
 })
 export class ListManagerComponent implements OnInit {
   todoList: TodoItem[] = [
