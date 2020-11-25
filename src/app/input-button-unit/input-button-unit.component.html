@@ -1,8 +1,8 @@
-<input #inputElementRef
-       class="todo-input"
-       [value]="title"
-       (keyup.enter)="submitValue($event.target.value)">
-
-<button class="btn" (click)="submitValue(inputElementRef.value)">
-  Save
-</button>
+<input
+  [value]="title"
+  (keyup.enter)="changeTitle($event.target.value)"
+  #inputElement
+  class="todo-input">
+<button
+  (click)="changeTitle(inputElement.value)"
+  class="btn">Save</button>

@@ -1,11 +1,21 @@
 <div class="todo-app">
-  <todo-input-button-unit (submit)="addItem($event)"></todo-input-button-unit>
+  <h1>
+    {{title}}
+  </h1>
 
-  <ul>
-    <li *ngFor="let todoItem of todoList">
-      <todo-todo-item [item]="todoItem"
-                      (remove)="removeItem($event)"
-                      (update)="updateItem($event.item, $event.changes)"></todo-todo-item>
-    </li>
-  </ul>
+  <p *ngIf="!authService.isLoggedIn">
+    You must log in to access the todo app!
+  </p>
+
+  <ng-template [ngIf]="authService.isLoggedIn">
+    <div class="todo-add">
+      <todo-input-button-unit (submit)="addItem($event)"></todo-input-button-unit>
+    </div>
+    <ul>
+      <li *ngFor="let item of todoList">
+        <todo-todo-item [item]="item"
+          (remove)="removeItem($event)"></todo-todo-item>
+      </li>
+    </ul>
+  </ng-template>
 </div>
