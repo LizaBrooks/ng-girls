@@ -22,11 +22,11 @@ export class TodoListService {
       storageService.getData(todoListStorageKey) || defaultTodoList;
   }
 
-  saveList() {
+  saveList(): void {
     this.storageService.setData(todoListStorageKey, this.todoList);
   }
 
-  addItem(item: TodoItem) {
+  addItem(item: TodoItem): void {
     this.todoList.push(item);
     this.saveList();
   }
@@ -37,13 +37,13 @@ export class TodoListService {
     this.saveList();
   }
 
-  deleteItem(item) {
+  deleteItem(item): void {
     const index = this.todoList.indexOf(item);
     this.todoList.splice(index, 1);
     this.saveList();
   }
 
-  getTodoList() {
+  getTodoList(): TodoItem[] {
     return this.todoList;
   }
 
