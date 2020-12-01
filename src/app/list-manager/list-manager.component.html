@@ -11,10 +11,12 @@
     <div class="todo-add">
       <todo-input-button-unit (submit)="addItem($event)"></todo-input-button-unit>
     </div>
-    <ul>
-      <li *ngFor="let item of todoList">
-        <todo-todo-item [item]="item"
-          (remove)="removeItem($event)"></todo-todo-item>
+    <ul *ngIf="todoList | async as todoItems">
+      <li *ngFor="let todoItem  of todoItems">
+        <todo-todo-item [item]="todoItem"
+          (remove)="removeItem($event)"
+          (update)="updateItem($event.item, $event.changes)"
+        ></todo-todo-item>
       </li>
     </ul>
   </ng-template>

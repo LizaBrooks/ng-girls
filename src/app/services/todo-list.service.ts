@@ -1,50 +1,58 @@
 import { Injectable } from '@angular/core';
 import { TodoItem } from '../interfaces/todo-item';
 import { StorageService } from './storage.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable, Subject} from 'rxjs';
 
-const todoListStorageKey = 'Todo_List';
-
-const defaultTodoList = [
-  {title: 'install NodeJS'},
-  {title: 'install Angular CLI'},
-  {title: 'create new app'},
-  {title: 'serve app'},
-  {title: 'develop app'},
-  {title: 'deploy app'},
-];
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TodoListService {
-  todoList: TodoItem[];
+  private todoListSubject: Subject<TodoItem[]> = new Subject<TodoItem[]>();
 
-  constructor(private storageService: StorageService) {
-    this.todoList =
-      storageService.getData(todoListStorageKey) || defaultTodoList;
+
+  constructor(private storageService: StorageService,
+              private http: HttpClient) {
+    this.retrieveListFromDataBase() ;
   }
 
-  saveList(): void {
-    this.storageService.setData(todoListStorageKey, this.todoList);
+  private _getAuthHeaders(): HttpHeaders {
+    return  new HttpHeaders().set('Content-Type', 'application/json');
   }
 
-  addItem(item: TodoItem): void {
-    this.todoList.push(item);
-    this.saveList();
+  retrieveListFromDataBase(): void {
+    this.http.get<TodoItem[]>('http://localhost:3000/items').subscribe(response => (
+        this.todoListSubject.next(response)),
+    );
   }
 
-  updateItem(item, changes) {
-    const index = this.todoList.indexOf(item);
-    this.todoList[index] = { ...item, ...changes };
-    this.saveList();
+  getTodoList(): Observable<TodoItem[]> {
+    return this.todoListSubject.asObservable();
   }
 
-  deleteItem(item): void {
-    const index = this.todoList.indexOf(item);
-    this.todoList.splice(index, 1);
-    this.saveList();
+  addItem(item: TodoItem): any {
+    this.http.post('http://localhost:3000/items',
+      JSON.stringify({title: item.title, completed: item.completed || false}),
+      {headers: this._getAuthHeaders()}).subscribe(
+      () => this.retrieveListFromDataBase()
+    );
   }
 
-  getTodoList(): TodoItem[] {
-    return this.todoList;
+  updateItem(item: TodoItem, changes): void {
+    this.http.put(`http://localhost:3000/items/${item._id}`,
+      JSON.stringify({
+        ...item,
+        completed: changes
+      }),
+      {headers: this._getAuthHeaders()}).subscribe(
+      () => this.retrieveListFromDataBase()
+    );
+  }
+
+  deleteItem(item: TodoItem): void {
+    this.http.delete(`http://localhost:3000/items/${item._id}`).subscribe(
+      () => this.retrieveListFromDataBase()
+    );
   }
 
 }

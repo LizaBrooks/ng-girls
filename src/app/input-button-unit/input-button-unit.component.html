@@ -1,8 +1,12 @@
-<input
-  [value]="title"
-  (keyup.enter)="changeTitle($event.target.value)"
-  #inputElement
-  class="todo-input">
-<button
-  (click)="changeTitle(inputElement.value)"
-  class="btn">Save</button>
+<input class="todo-input"
+       #todoItem
+       [value]="title"
+       (keyup.enter)="submitValue(todoItem.value); todoItem.value = ''">
+
+<button mat-raised-button
+        color="primary"
+        (click)="submitValue(todoItem.value); todoItem.value = ''">
+  Save
+</button>
+
+

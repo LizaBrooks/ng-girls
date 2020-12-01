@@ -8,6 +8,9 @@ import { ListManagerComponent } from './list-manager/list-manager.component';
 import {TodoListService} from './services/todo-list.service';
 import {AuthService} from './auth.service';
 import { AuthComponent } from './auth/auth.component';
+import {HttpClientModule} from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -18,11 +21,12 @@ import { AuthComponent } from './auth/auth.component';
     AuthComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatButtonModule
   ],
-  providers: [
-    TodoListService,
-    AuthService],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

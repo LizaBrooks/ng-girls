@@ -2,6 +2,7 @@ import {Component, OnInit, Output} from '@angular/core';
 import {TodoItem} from '../interfaces/todo-item';
 import {TodoListService} from '../services/todo-list.service';
 import {AuthService} from '../auth.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'todo-list-manager',
@@ -9,30 +10,28 @@ import {AuthService} from '../auth.service';
   styleUrls: ['./list-manager.component.scss']
 })
 export class ListManagerComponent implements OnInit {
-  title = 'todo';
-  todoList: any;
+  title = 'My To Do List APP';
+  todoList: Observable<TodoItem[]>;
   constructor(
     private todoListService: TodoListService,
     public authService: AuthService) {
-    this.getTodoList();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.todoList = this.todoListService.getTodoList();
   }
 
-  addItem(title: string): void {
-    this.todoList = this.todoListService.addItem({title});
-    this.getTodoList();
+  addItem(title: string): void{
+    this.todoListService.addItem({title});
   }
 
 
   removeItem(item): void {
-    this.todoList = this.todoListService.deleteItem(item);
-    this.getTodoList();
+    this.todoListService.deleteItem(item);
   }
 
-  getTodoList(): void {
-    this.todoList = this.todoListService.getTodoList();
+  updateItem(item, changes): void {
+    this.todoListService.updateItem(item, changes);
   }
 
 }

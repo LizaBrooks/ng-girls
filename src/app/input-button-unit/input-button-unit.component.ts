@@ -11,12 +11,17 @@ export class InputButtonUnitComponent implements OnInit {
   title = 'Hello World';
   @Output() submit: EventEmitter<string> = new EventEmitter();
 
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
   }
-  changeTitle(newTitle: string): void {
-    this.submit.emit(newTitle);
+
+  ngOnInit(): void {
+  }
+
+  submitValue(newTitle: string): void {
+    if (newTitle) {
+      this.submit.emit(newTitle);
+    } else {
+      alert('Value cannot be empty');
+    }
   }
 }
